@@ -1,8 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Support.UI;
-using System;
 using FluentAssertions;
 using SeleniumExtras.WaitHelpers;
 using Bogus;
@@ -10,10 +7,8 @@ using Bogus;
 namespace MyTestProject
 {
     [TestClass]
-    public class Login
+    public class Login : BaseTest
     {
-        private IWebDriver driver;
-        private WebDriverWait wait;
         private IWebElement Txt_Email;
         private IWebElement Txt_Password;
         private string email;
@@ -60,30 +55,10 @@ namespace MyTestProject
 
         [TestInitialize]
         public void Init()
-        {
-            var options = new ChromeOptions
-            {
-                PageLoadStrategy = PageLoadStrategy.Normal
-            };
-            options.AddArguments("incognito");
-            options.AddArguments("--headless");
-            var service = ChromeDriverService.CreateDefaultService();
-
-            driver = new ChromeDriver(service, options);
-            driver.Navigate().GoToUrl("https://react-redux.realworld.io");
-
-            var fake = new Faker();
-            wait = new WebDriverWait(driver, new TimeSpan(0, 0, 30));
-
+        {            
             email = fake.Person.Email;
             password = fake.Random.String(10);
             username = fake.Name.FirstName() + fake.Random.Number(100, 1000);
-        }
-
-        [TestCleanup]
-        public void TestClean()
-        {
-            driver.Close();
         }
 
     }
